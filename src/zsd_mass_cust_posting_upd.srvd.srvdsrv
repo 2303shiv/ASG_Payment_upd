@@ -1,0 +1,4 @@
+@EndUserText.label: 'Customer mass posting upload'
+define service ZSD_Mass_cust_posting_upd {
+  expose ZC_Mass_customer_posting_upd;
+}

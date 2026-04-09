@@ -1,0 +1,49 @@
+managed implementation in class zbp_i_mass_customer_posting_up unique;
+strict ;
+with draft;
+
+define behavior for ZI_Mass_customer_posting_upd //alias <alias_name>
+persistent table zdb_cust_post
+draft table zdb_cust_post_dt
+lock master
+total etag LastChangedAt
+authorization master ( instance )
+early numbering
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) EndUser, FileId;
+
+   action ProcessFile result [1] $self;
+
+     side effects
+  {
+    field Attachment affects field FileStatus;
+ //   action ProcessFile affects $self;
+  }
+
+  draft action Activate optimized;
+  draft action Edit;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+
+  mapping for zdb_cust_post
+     {
+      EndUser            = end_user;
+      FileId             = file_id;
+      FileStatus         = file_status;
+      Attachment         = attachment;
+      Mimetype           = mimetype;
+      Filename           = filename;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+      LocalLastChangedBy = local_last_changed_by;
+    }
+
+}
